@@ -7,17 +7,22 @@
 
 # Yikes!
 
-Yikes! is a command-line program designed to facilitate interaction with large language models (LLMs).
-It allows users to either query the model directly from the CLI or start a REPL chat session.
-Yikes! aims to be a lightweight solution with no dependencies beyond Python's standard library, enabling productivity by providing quick answers without leaving the terminal.
+Yikes! is a command-line program designed to facilitate interaction with large language models (LLMs). It allows users to either query the model directly from the CLI or start an interactive REPL chat session. Yikes! aims to be a lightweight solution with minimal dependencies, enabling productivity by providing quick answers without leaving the terminal.
+
+---
 
 ## Features
 
-- **Direct Query**: Send a single query to the LLM and receive an immediate response without ever leaving the CLI.
+- **Direct Query**: Send a single query to the LLM and receive an immediate response without leaving the CLI.
 - **REPL Chat Session**: Start an interactive chat session with a chosen language model.
+- **Multiple Model Support**: Choose from a variety of models, including:
+  - **Deepseek V3**: Optimized for general-purpose tasks.
+  - **Llama 3**: Meta's advanced conversational model.
+  - **Phi-3**: Microsoft's lightweight yet powerful instruction-following model.
+- **Customizable Prompts**: Easily structure conversations with system, user, and assistant prompts.
+- **Save Conversations**: Save entire chat histories to a file for later review.
 
-Currently set up with Hugging Face's free endpoints for Llama 3 and Phi-3 models.
-Llama 3 is the default model for direct querying.
+---
 
 ## Installation
 
@@ -29,93 +34,101 @@ python yikes.py install
 
 This will copy the script to `/usr/local/bin` and make it executable from anywhere in your terminal.
 
-### Setting Up the API Key
+---
 
-If you use Yikes! as is, you need to get an API key from [Hugging Face](https://huggingface.co/).
+## Setup
 
-Ensure your API key is either set as an environment variable or available in the same folder as Yikes!.
-To set the API key as an environment variable:
+### API Keys
 
-```sh
-export HUGGINGFACE_API_KEY=your_api_key_here
-```
-
-To add the API key to your `~/.bashrc` file, open the file in a text editor and add the following line:
+To use Yikes!, you’ll need API keys for the respective model providers. Set them as environment variables or store them in a file:
 
 ```sh
 export HUGGINGFACE_API_KEY=your_api_key_here
+export OPENROUTER_API_KEY=your_api_key_here
 ```
 
-After editing `~/.bashrc`, run the following command to apply the changes:
+Alternatively, add the keys to your `~/.bashrc` or `~/.zshrc` file for persistence.
 
-```sh
-source ~/.bashrc
-```
+---
 
 ## Usage
 
 ### Direct Query
 
-To send a single query to the language model, use the following syntax:
+Send a single query to the language model:
 
 ```sh
-yikes "How do I list the full path of files, in folder /foo/bar and all its subfolders, that were modified in the past 3 days?"
+yikes "How do I list files modified in the last 3 days?"
 ```
 
-#### Example of a Direct Query
+### Interactive Chat
 
-```sh
-$ yikes "How do I list the full path of files, in folder /foo/bar and all its subfolders, that were modified in the past 3 days?"
-You can use the `find` command with the `-path` and `-mtime` options to achieve this:
-
-`find /foo/bar -path "*/" -mtime -3 -exec ls -ld {} \;`
-
-This command will list the full path of files in the `/foo/bar` directory and its subdirectories that were modified within the past 3 days. The `-path "*/"` option ensures that only directories are considered, and the `-mtime -3` option specifies that the files should have been modified within the past 3 days. The `-exec` option runs the `ls -ld` command on each matching file, displaying the full path and other file information.
-```
-
-### REPL Chat Session
-
-To start a REPL chat session, simply run the following command:
+Start an interactive chat session:
 
 ```sh
 yikes
 ```
 
-You will be prompted to select a model and then you can start chatting.
+### Commands in Chat
 
-#### Example of a REPL Conversation
+- **Switch Models**: Use `swap` or `model` to change models during a session.
+- **Restart Conversation**: Use `clear` or `restart` to reset the chat history.
+- **Save Conversation**: Use `save <filepath>` to save the chat history to a file.
+- **Exit**: Use `quit`, `:q`, or `exit` to end the session.
+
+---
+
+## Supported Models
+
+| Short Name   | Model Name                                      | API Provider     |
+|--------------|------------------------------------------------|------------------|
+| `deepseekv3` | deepseek/deepseek-chat:free                    | OpenRouter       |
+| `llama3`     | meta-llama/Meta-Llama-3-8B-Instruct            | Hugging Face     |
+| `phi3`       | microsoft/Phi-3-mini-4k-instruct               | Hugging Face     |
+
+---
+
+## Examples
+
+### Direct Query Example
+
+```sh
+$ yikes "How do I list files modified in the last 3 days?"
+You can use the `find` command with the `-mtime` option:
+`find /path/to/folder -type f -mtime -3`
+```
+
+### Interactive Chat Example
 
 ```sh
 $ yikes
 Available models:
-[0] llama3
-[1] phi3
-Select a model (enter the number or short name): 0
+[0] deepseekv3
+[1] llama3
+[2] phi3
+Select a model (enter the number or short name): 1
 Chatting with meta-llama/Meta-Llama-3-8B-Instruct:
 > Who are you?
-AI: I'm LLaMA, an AI assistant developed by Meta AI that can understand and respond to human input in a conversational manner.
-> How do you like being integrated into Yikes!?
-AI: I'm excited to be a part of Yikes! and help users like you with information and tasks. It's a great platform to assist and learn from users.
+AI: I'm LLaMA, an AI assistant developed by Meta AI.
+> How do I list files modified in the last 3 days?
+AI: Use the `find` command: `find /path -type f -mtime -3`.
 ```
 
-### Available Commands in the Chat
-
-- **Exit the Application**: Use `quit`, `:q`, or `exit` to exit the REPL chat session.
-- **Restart the Conversation**: Use `clear` or `restart` to clear the conversation history and start anew.
-- **Swap the Model**: Use `swap` or `switch` to change to a different language model during the REPL chat session.
+---
 
 ## Requirements
 
 - Python 3.x
 
+---
+
 ## License
 
 This project is licensed under the MIT License.
 
-## Contributing
-
-Feel free to contribute by submitting a pull request or opening an issue.
-
 ---
 
-Happy chatting!
+## Contributing
+
+Feel free to contribute by submitting a pull request or opening an issue. Happy chatting!
+
