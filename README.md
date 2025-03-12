@@ -61,6 +61,14 @@ Send a single query to the language model:
 yikes "How do I list files modified in the last 3 days?"
 ```
 
+### Direct Query with Context
+
+Pipe stdin as context to the language model:
+
+```sh
+cat context.txt | yikes "A query related to the context."
+```
+
 ### Interactive Chat
 
 Start an interactive chat session:
